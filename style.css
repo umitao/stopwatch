@@ -1,0 +1,29 @@
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-size: 10px;
+}
+
+.wrapper {
+    width: 375px;
+    height: 667px;
+    margin: 0 auto;
+    color: white;
+    text-align: center;
+    background-color: black;
+}
+
+p.digits{
+    padding: 80px 0 0 0;
+}
+
+span#minutes, span#seconds, span#miliseconds {
+    font-family: "HelveticaNeue-Thin";
+    font-size: 8em;
+}
+
+span.punctuation{
+    font-family: "AvenirNextCondensed-UltraLight";
+    font-size: 8em;
+}
