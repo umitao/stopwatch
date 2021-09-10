@@ -14,6 +14,9 @@ body {
     background-color: black;
 }
 
+div.bottom {
+    width: 375px;
+}
 p.digits{
     padding: 80px 0 0 0;
 }
@@ -27,3 +30,23 @@ span.punctuation{
     font-family: "AvenirNextCondensed-UltraLight";
     font-size: 8em;
 }
+
+#start {
+    width: 60px;
+    height: 60px;
+    margin: 50px 0 0 100px;
+    border-radius: 50%;
+    color: rgba(103, 203, 103, 1);
+    background-color: rgba(19, 41, 20, 1);
+  }
+
+#lap {
+    width: 60px;
+    height: 60px;
+    margin: 50px 100px 0 0;
+    
+    border-radius: 50%;
+    color: rgba(150, 149, 155, 1);
+    background-color: rgba(13, 14, 16, 1);
+  }
+  
