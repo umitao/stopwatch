@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -11,19 +12,32 @@
 <body>
     <div class="wrapper">
         <div class="top">
-            <p class="digits"><span id="minutes">00</span><span class="punctuation">:</span><span
-                    id="seconds">00</span><span class="punctuation">,</span><span id="miliseconds">00</span></p>
-            <button id="lap">Lap</button>
-            <button id="start">Start</button>
+            <p class="digits">
+            </p>
+            <button id="lap" >Lap</button>
+            <button id="reset">Reset</button>
+            <button id="start" onmouseup={startTimer()}>Start</button>
+            <button id="stop" onmouseup={stopTimer()}>Stop</button>
         </div>
         <div class="bottom">
-            <td>
-                <tr>Lap 1</tr>
-                <tr>Lap 2</tr>
-                <tr>Lap 3</tr>
-                <tr>Lap 4</tr>
-                <tr>Lap 5</tr>
-            </td>
+            <table>
+                <tr>
+                    <td>Lap 1</td>
+                    <td>{time}</td>
+                </tr>
+                <tr>
+                    <td>Lap 2</td>
+                </tr>
+                <tr>
+                    <td>Lap 3</td>
+                </tr>
+                <tr>
+                    <td>Lap 4</td>
+                </tr>
+                <tr>
+                    <td>Lap 5</td>
+                </tr>
+            </table>
         </div>
     </div>
     <script src="app.js"></script>
