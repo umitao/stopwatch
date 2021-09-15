@@ -1,3 +1,17 @@
+:root {
+  --primary-dark-color: rgb(0, 0, 0);
+  --stop-text-color: rgb(255, 71, 64);
+  --stop-button-color: rgb(52, 13, 14);
+  --stop-clicked-color: rgb(28, 7, 6);
+  --start-text-color: rgb(103, 203, 103);
+  --start-button-color: rgb(19, 41, 20);
+  --start-clicked-color: rgb(5, 23, 10);
+  --lap-inactive-text-color: rgb(152, 152, 159);
+  --lap-inactive-button-color: rgb(28, 28, 30);
+  --lap-active-text-color: rgb(255, 255, 255);
+  --lap-active-button-color: rgb(51, 51, 51);
+  --lap-clicked-button-color: rgb(27, 27, 27);
+}
 body {
   padding: 0;
   margin: 0;
@@ -8,16 +22,15 @@ body {
 @font-face {
   font-family: "SF-Pro-Display-Ultralight";
   src: url(./assets/fonts/SF-Pro-Display-Ultralight.otf);
-  /* font-display: optional; */
 }
 
 .wrapper {
   width: 375px;
   height: 667px;
   margin: 0 auto;
-  color: white;
+  color: var(--lap-active-text-color);
   text-align: center;
-  background-color: black;
+  background-color: var(--primary-dark-color);
 }
 
 div.bottom {
@@ -30,8 +43,6 @@ p.digits {
 .digits {
   font-family: "SF-Pro-Display-Ultralight";
   font-size: 8em;
-  /* letter-spacing: normal; */
-  /* font-size-adjust: 1; */
   font-variant-numeric: tabular-nums;
 }
 
@@ -40,22 +51,10 @@ p.digits {
   height: 60px;
   margin: 50px 0 0 100px;
   border-radius: 50%;
-  border: 4px double rgb(19, 41, 20);
   background-clip: padding-box;
-  border-color: rgba(19, 41, 20, 1);
-  color: rgba(103, 203, 103, 1);
-  background-color: rgba(19, 41, 20, 1);
-}
-
-#lap {
-  width: 60px;
-  height: 60px;
-  margin: 50px 100px 0 0;
-  border-radius: 50%;
-  border: 4px double rgba(51, 51, 51, 1);
-  background-clip: padding-box;
-  color: rgba(153, 153, 160, 1);
-  background-color: rgba(51, 51, 51, 1);
+  color: var(--start-text-color);
+  border: 4px double var(--start-button-color);
+  background-color: var(--start-button-color);
 }
 
 #stop {
@@ -63,10 +62,21 @@ p.digits {
   height: 60px;
   margin: 50px 0 0 100px;
   border-radius: 50%;
-  border: 4px double rgba(52, 13, 14, 1);
   background-clip: padding-box;
-  color: rgba(255, 71, 64, 1);
-  background-color: rgba(52, 13, 14, 1);
+  color: var(--stop-text-color);
+  border: 4px double var(--stop-button-color);
+  background-color: var(--stop-button-color);
+}
+
+#lap {
+  width: 60px;
+  height: 60px;
+  margin: 50px 100px 0 0;
+  border-radius: 50%;
+  background-clip: padding-box;
+  color: var(--lap-inactive-text-color);
+  border: 4px double var(--lap-inactive-button-color);
+  background-color: var(--lap-inactive-button-color);
 }
 
 #reset {
@@ -74,10 +84,17 @@ p.digits {
   height: 60px;
   margin: 50px 100px 0 0;
   border-radius: 50%;
-  border: 4px double rgba(51, 51, 51, 1);
   background-clip: padding-box;
-  color: rgba(255, 255, 255, 1);
-  background-color: rgba(51, 51, 51, 1);
+  color: var(--lap-active-text-color);
+  border: 4px double var(--lap-active-button-color);
+  background-color: var(--lap-active-button-color);
+}
+
+#start:hover,
+#stop:hover,
+#lap:hover,
+#reset:hover {
+  cursor: pointer;
 }
 
 /* disabled red 28 7 6

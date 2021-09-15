@@ -6,56 +6,84 @@ const resetButton = document.getElementById("reset");
 const startButton = document.getElementById("start");
 const lapButton = document.getElementById("lap");
 
-const minutes = document.createElement("span");
-minutes.innerText = "00:";
-const seconds = document.createElement("span");
-seconds.innerText = "00.";
-const milliseconds = document.createElement("span");
-milliseconds.innerText = "00";
-
-// let hours = null;
-let startTime = null;
+let startingTime = null;
 let savedTime = null;
 let timerID = null;
+const timeElapsed = 0;
 
 window.onload = () => {
-  digits.append(minutes, seconds, milliseconds);
-  resetButton.style.display = "none";
-  stopButton.style.display = "none";
+  resetHandler();
+  hideButton(resetButton, stopButton);
 };
 
-stopButton.onmouseup = function stopTimer() {
-  savedTime = Date.now() - startTime;
+stopButton.onmouseup = function pauseTimer() {
+  savedTime = Date.now() - startingTime;
   clearInterval(timerID);
-  stopButton.style.display = "none";
-  lapButton.style.display = "none";
-  startButton.style.display = "inline-block";
-  resetButton.style.display = "inline-block";
+  hideButton(stopButton, lapButton);
+  showButton(startButton, resetButton);
 };
 
 startButton.onmouseup = function startTimer() {
-  if (savedTime === null) {
-    startTime = Date.now();
+  if (!savedTime) {
+    startingTime = Date.now();
   } else {
-    startTime = Date.now() - savedTime;
+    startingTime = Date.now() - savedTime;
   }
   timerID = setInterval(handleTimer, 10);
-  startButton.style.display = "none";
-  resetButton.style.display = "none";
-  stopButton.style.display = "inline-block";
-  lapButton.style.display = "inline-block";
+  showButton(stopButton, lapButton);
+  hideButton(startButton, resetButton);
 };
 
+resetButton.onmouseup = resetHandler;
+
 function handleTimer() {
-  const timeDifference = Math.floor((Date.now() - startTime) / 10);
-  milliseconds.innerText = (timeDifference % 100).toString().padStart(2, "0");
-  seconds.innerText = `${Math.floor((timeDifference / 100) % 60)
-    .toString()
-    .padStart(2, "0")}.`;
-  minutes.innerText = `${Math.floor((timeDifference / (100 * 60)) % 60)
+  const timeDifference = Math.floor((Date.now() - startingTime) / 10);
+  digits.innerHTML = `${getStringMinutes(timeDifference)}${getStringSeconds(
+    timeDifference
+  )}${getStringMilliseconds(timeDifference)}`;
+}
+
+function getStringMinutes(timeElapsed) {
+  return `${Math.floor((timeElapsed / (100 * 60)) % 60)
     .toString()
     .padStart(2, "0")}:`;
 }
+
+function getStringSeconds(timeElapsed) {
+  return `${Math.floor((timeElapsed / 100) % 60)
+    .toString()
+    .padStart(2, "0")}.`;
+}
+
+function getStringMilliseconds(timeElapsed) {
+  return `${Math.floor(timeElapsed % 100)
+    .toString()
+    .padStart(2, "0")}`;
+}
+
+function resetHandler() {
+  digits.innerHTML = `${getStringMinutes(0)}${getStringSeconds(
+    0
+  )}${getStringMilliseconds(0)}`;
+  clearInterval(timerID);
+  savedTime = 0;
+}
+
+function hideButton(...selector) {
+  selector.map((element) => (element.style.display = "none"));
+}
+
+function showButton(...selector) {
+  selector.map((element) => (element.style.display = "inline-block"));
+}
+
+// const hideButton = (selector) => (selector.style.display = "none");
+// const showButton = (selector) => (selector.style.display = "inline-block");
+
+// const hide = (selector1, selector2) => {
+//   selector1.style.display = "none";
+//   selector2.style.display = "none";
+// };
 
 //console.log(startTimer);
 
