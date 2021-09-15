@@ -11,11 +11,6 @@ let savedTime = null;
 let timerID = null;
 const timeElapsed = 0;
 
-window.onload = () => {
-  resetHandler();
-  hideButton(resetButton, stopButton);
-};
-
 stopButton.onmouseup = function pauseTimer() {
   savedTime = Date.now() - startingTime;
   clearInterval(timerID);
@@ -34,48 +29,54 @@ startButton.onmouseup = function startTimer() {
   hideButton(startButton, resetButton);
 };
 
-resetButton.onmouseup = resetHandler;
+resetButton.onmouseup = function handleReset() {
+  digits.innerHTML = `${getDisplayTime(0)}`;
+  clearInterval(timerID);
+  savedTime = 0;
+  showButton(lapButton);
+  hideButton(resetButton);
+};
 
 function handleTimer() {
   const timeDifference = Math.floor((Date.now() - startingTime) / 10);
-  digits.innerHTML = `${getStringMinutes(timeDifference)}${getStringSeconds(
-    timeDifference
-  )}${getStringMilliseconds(timeDifference)}`;
+  digits.innerHTML = `${getDisplayTime(timeDifference)}`;
 }
 
-function getStringMinutes(timeElapsed) {
-  return `${Math.floor((timeElapsed / (100 * 60)) % 60)
-    .toString()
-    .padStart(2, "0")}:`;
+function hideButton(...selectors) {
+  selectors.map((element) => (element.style.display = "none"));
 }
 
-function getStringSeconds(timeElapsed) {
-  return `${Math.floor((timeElapsed / 100) % 60)
-    .toString()
-    .padStart(2, "0")}.`;
+function showButton(...selectors) {
+  selectors.map((element) => (element.style.display = "inline-block"));
 }
 
-function getStringMilliseconds(timeElapsed) {
-  return `${Math.floor(timeElapsed % 100)
-    .toString()
-    .padStart(2, "0")}`;
+function getDisplayTime(timeElapsed) {
+  const minutes = Math.floor((timeElapsed / (100 * 60)) % 60);
+  const seconds = Math.floor((timeElapsed / 100) % 60);
+  const hundredths = Math.floor(timeElapsed % 100);
+
+  const padNumber = (...number) =>
+    number.map((element) => element.toString().padStart(2, "0"));
+  return padNumber(minutes, seconds, hundredths);
 }
 
-function resetHandler() {
-  digits.innerHTML = `${getStringMinutes(0)}${getStringSeconds(
-    0
-  )}${getStringMilliseconds(0)}`;
-  clearInterval(timerID);
-  savedTime = 0;
-}
+// function getStringMinutes(timeElapsed) {
+//   return `${Math.floor((timeElapsed / (100 * 60)) % 60)
+//     .toString()
+//     .padStart(2, "0")}:`;
+// }
 
-function hideButton(...selector) {
-  selector.map((element) => (element.style.display = "none"));
-}
+// function getStringSeconds(timeElapsed) {
+//   return `${Math.floor((timeElapsed / 100) % 60)
+//     .toString()
+//     .padStart(2, "0")}.`;
+// }
 
-function showButton(...selector) {
-  selector.map((element) => (element.style.display = "inline-block"));
-}
+// function getStringMilliseconds(timeElapsed) {
+//   return `${Math.floor(timeElapsed % 100)
+//     .toString()
+//     .padStart(2, "0")}`;
+// }
 
 // const hideButton = (selector) => (selector.style.display = "none");
 // const showButton = (selector) => (selector.style.display = "inline-block");
