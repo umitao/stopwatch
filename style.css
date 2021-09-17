@@ -20,7 +20,7 @@ body {
 }
 
 @font-face {
-  font-family: "SF-Pro-Display-Ultralight";
+  font-family: "SF-Pro";
   src: url(./assets/fonts/SF-Pro-Display-Ultralight.otf);
 }
 
@@ -37,11 +37,12 @@ div.bottom {
   width: 375px;
 }
 p.digits {
-  padding: 80px 0 0 0;
+  padding: 160px 0 0 0;
+  margin-bottom: 25px;
 }
 
 .digits {
-  font-family: "SF-Pro-Display-Ultralight";
+  font-family: "SF-Pro";
   font-size: 8em;
   font-variant-numeric: tabular-nums;
 }
@@ -99,6 +100,38 @@ p.digits {
   cursor: pointer;
 }
 
+#table {
+  width: 375px;
+  font-family: "SF-Pro";
+  font-size: 1.5em;
+  /* border-collapse: separate; */
+  /* border-spacing: 100px 0; */
+  /* border: 1px solid #dddddd; */
+  /* overflow: hidden; */
+}
+
+tbody {
+  display: table;
+  width: 100%;
+  /* border: 2px solid #fff; */
+}
+
+/* tr {
+} */
+td,
+th {
+  /* border: 1px solid #dddddd; */
+
+  padding: 20px;
+}
+
+.lapNumber {
+  text-align: left;
+}
+
+.lapTime {
+  text-align: right;
+}
 /* disabled red 28 7 6
   disabled green 5 23 10
   disabled gray 27 27 27

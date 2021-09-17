@@ -5,41 +5,65 @@ const stopButton = document.getElementById("stop");
 const resetButton = document.getElementById("reset");
 const startButton = document.getElementById("start");
 const lapButton = document.getElementById("lap");
+const table = document.querySelector("table");
+const lapTimeDOM = document.querySelector(".lapTime");
+const lapNumber = document.querySelector(".lapNumber");
 
 let startingTime = null;
 let savedTime = null;
 let timerID = null;
-const timeElapsed = 0;
+// const timeElapsed = 0;
+const laps = [];
 
-stopButton.onmouseup = function pauseTimer() {
+stopButton.onclick = function pauseTimer() {
   savedTime = Date.now() - startingTime;
   clearInterval(timerID);
   hideButton(stopButton, lapButton);
   showButton(startButton, resetButton);
 };
 
-startButton.onmouseup = function startTimer() {
+startButton.onclick = function startTimer() {
   if (!savedTime) {
     startingTime = Date.now();
+    lapNumber.innerHTML = `Lap ${laps.length + 1}`;
   } else {
     startingTime = Date.now() - savedTime;
   }
+  lapTimeDOM.innerHTML = handleTimer();
   timerID = setInterval(handleTimer, 10);
   showButton(stopButton, lapButton);
   hideButton(startButton, resetButton);
 };
 
-resetButton.onmouseup = function handleReset() {
+resetButton.onclick = function handleReset() {
   digits.innerHTML = `${getDisplayTime(0)}`;
+  //lapTimeDOM.innerHTML = `${getDisplayTime(0)}`;
+  clearLapTimes();
   clearInterval(timerID);
   savedTime = 0;
   showButton(lapButton);
   hideButton(resetButton);
 };
 
+//LAP FUNC ONGOING WORK
+lapButton.onclick = function addLapRow(lapTime) {
+  //console.log(timeDifference);
+  lapTime = handleTimer();
+  console.log(lapTimeDOM); //Can be 1.60
+  lapTimeDOM.innerHTML = lapTime;
+  console.log(lapTime); // Can be 1.59
+};
+
+function clearLapTimes() {
+  lapTimeDOM.innerHTML = null;
+  lapNumber.innerHTML = null;
+}
+
 function handleTimer() {
   const timeDifference = Math.floor((Date.now() - startingTime) / 10);
   digits.innerHTML = `${getDisplayTime(timeDifference)}`;
+  lapTimeDOM.innerHTML = `${getDisplayTime(timeDifference)}`;
+  return digits.innerHTML;
 }
 
 function hideButton(...selectors) {
@@ -55,11 +79,12 @@ function getDisplayTime(timeElapsed) {
   const seconds = Math.floor((timeElapsed / 100) % 60);
   const hundredths = Math.floor(timeElapsed % 100);
 
-  const padNumber = (...number) =>
-    number.map((element) => element.toString().padStart(2, "0"));
-  return padNumber(minutes, seconds, hundredths);
+  const padNumber = (number) => number.toString().padStart(2, "0");
+  return `${padNumber(minutes)}:${padNumber(seconds)}.${padNumber(hundredths)}`;
 }
 
+// const padNumber = (...number) =>
+//   number.map((element) => element.toString().padStart(2, "0"));
 // function getStringMinutes(timeElapsed) {
 //   return `${Math.floor((timeElapsed / (100 * 60)) % 60)
 //     .toString()
