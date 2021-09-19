@@ -10,11 +10,16 @@ const fragment = new DocumentFragment();
 
 let startingTime = null;
 let totalTimeSinceStart = null;
+let totalLapTime = 0;
 let stoppedTime = null;
 let timerID = undefined;
-const totalLapTime = 0;
-let lapNumber = 0;
+// const totalLapTime = 0;
+let lapNumber = 1;
+let lapTimer = undefined;
+
 const laps = [];
+
+window.onload = addEmptyRows();
 
 startButton.onclick = function startTimer() {
   if (!stoppedTime) {
@@ -23,6 +28,7 @@ startButton.onclick = function startTimer() {
     startingTime = Date.now() - stoppedTime;
   }
   timerID = setInterval(handleTimer, 10);
+  lapTimer = setInterval(handleLapTimer, 10);
   showButton(stopButton, lapButton);
   hideButton(startButton, resetButton);
 };
@@ -30,6 +36,7 @@ startButton.onclick = function startTimer() {
 stopButton.onclick = function pauseTimer() {
   stoppedTime = Date.now() - startingTime;
   clearInterval(timerID);
+  clearInterval(lapTimer);
   hideButton(stopButton, lapButton);
   showButton(startButton, resetButton);
 };
@@ -38,33 +45,48 @@ resetButton.onclick = function handleReset() {
   digits.innerHTML = `${convertTimeToString(0)}`;
   laps.length = 0;
   clearInterval(timerID);
+  clearInterval(lapTimer);
   while (table.firstChild) {
     table.removeChild(table.lastChild);
   }
   stoppedTime = 0;
-  lapNumber = 0;
+  lapNumber = 1;
+  totalLapTime = 0;
   showButton(lapButton);
   hideButton(resetButton);
+  addEmptyRows();
 };
 
 //LAP FUNC ONGOING WORK
 lapButton.onclick = function saveLapCreateNew() {
+  // console.log(timerID);
   if (timerID !== undefined) {
     lapNumber++;
-    const totalLapTime = laps.reduce(
-      (lapsTempTotal, lastLap) => lapsTempTotal + lastLap,
-      0
-    );
-
     const lastLapTime = Date.now() - (startingTime + totalLapTime);
     laps.push(lastLapTime);
+    // console.log(...laps);
+    totalLapTime = laps.reduce(
+      (lapsTempTotal, lastLap) => lapsTempTotal + lastLap
+    );
+
     addLapRow(lapNumber, lastLapTime);
+    removeEmptyRows();
   }
 };
 
 function handleTimer() {
   totalTimeSinceStart = Math.floor(Date.now() - startingTime);
   digits.innerHTML = `${convertTimeToString(totalTimeSinceStart)}`;
+}
+
+function handleLapTimer() {
+  let lapStartTime = startingTime + totalLapTime;
+  let currentLapTime = Math.floor(Date.now() - lapStartTime);
+  let parentOfLapCell = table.firstElementChild;
+  let lapTimeCell = parentOfLapCell.lastChild;
+  let lapNumberCell = parentOfLapCell.firstChild;
+  lapNumberCell.innerHTML = `Lap ${lapNumber}`;
+  lapTimeCell.innerHTML = `${convertTimeToString(currentLapTime)}`;
 }
 
 function hideButton(...selectors) {
@@ -83,7 +105,18 @@ function addLapRow(lapNumber, lapTime) {
   trFragment.prepend(td.cloneNode()); //Until here it does NOT render
   tr.firstChild.innerHTML = `Lap ${lapNumber}`;
   tr.lastChild.innerHTML = convertTimeToString(lapTime);
+
   table.prepend(trFragment); //Here it goes to DOM
+  function markBestWorstLap() {
+    if (laps.length >= 2) {
+      const worstLap = Math.min(...laps);
+      const bestLap = Math.max(...laps);
+      if (lapTime < bestLap) {
+        tr.classList.add("best-lap");
+      }
+    }
+  }
+  markBestWorstLap();
 }
 
 function convertTimeToString(time) {
@@ -99,7 +132,21 @@ function convertTimeToString(time) {
 function addEmptyRows() {
   for (let i = 0; 6 > i + laps.length; i++) {
     let emptyRow = document.createElement("tr");
-    emptyRow.appendChild(table);
+    let emptyCell = document.createElement("td");
+    table.appendChild(emptyRow);
+    emptyRow.appendChild(emptyCell);
+    emptyRow.appendChild(emptyCell.cloneNode());
+    emptyRow = null;
+    emptyCell = null;
+  }
+}
+
+function removeEmptyRows() {
+  if (7 > lapNumber) {
+    let allLapNodes = document.querySelectorAll("tr");
+    let lastLapNode = allLapNodes[allLapNodes.length - 1];
+    // console.log(lastLapNode);
+    lastLapNode.remove();
   }
 }
 

@@ -35,7 +35,7 @@ body {
 
 div.bottom {
   width: 375px;
-  height: 277px;
+  height: 270px;
   overflow: auto;
 }
 p.digits {
@@ -52,7 +52,7 @@ p.digits {
 #start {
   width: 60px;
   height: 60px;
-  margin: 50px 0 0 100px;
+  margin: 50px 0 10px 100px;
   border-radius: 50%;
   background-clip: padding-box;
   color: var(--start-text-color);
@@ -64,7 +64,7 @@ p.digits {
   display: none;
   width: 60px;
   height: 60px;
-  margin: 50px 0 0 100px;
+  margin: 50px 0 10px 100px;
   border-radius: 50%;
   background-clip: padding-box;
   color: var(--stop-text-color);
@@ -75,7 +75,7 @@ p.digits {
 #lap {
   width: 60px;
   height: 60px;
-  margin: 50px 100px 0 0;
+  margin: 50px 100px 10px 0;
   border-radius: 50%;
   background-clip: padding-box;
   color: var(--lap-inactive-text-color);
@@ -87,7 +87,7 @@ p.digits {
   display: none;
   width: 60px;
   height: 60px;
-  margin: 50px 100px 0 0;
+  margin: 50px 100px 10px 0;
   border-radius: 50%;
   background-clip: padding-box;
   color: var(--lap-active-text-color);
@@ -115,13 +115,15 @@ table {
 }
 
 tbody {
+  margin: 0 auto;
   display: table;
-  width: 100%;
+  width: 90%;
+  padding-top: 10px;
   /* border: 2px solid #fff; */
 }
 
 tr {
-  border-bottom: 2px solid gray;
+  border-bottom: 1px solid gray;
 }
 
 td:first-child {
@@ -134,10 +136,21 @@ td:last-child {
 
 td,
 th {
-  /* border: 1px solid #dddddd; */
-
-  padding: 12px 20px;
+  height: 20px;
+  padding: 10px 20px;
 }
+
+.best-lap {
+  color: var(--start-text-color);
+}
+
+.worst-lap {
+  color: var(--stop-text-color);
+}
+/* td:before {
+  content: "|";
+  visibility: hidden;
+} */
 
 /* disabled red 28 7 6
   disabled green 5 23 10
