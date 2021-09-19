@@ -13,7 +13,6 @@ let totalTimeSinceStart = null;
 let totalLapTime = 0;
 let stoppedTime = null;
 let timerID = undefined;
-// const totalLapTime = 0;
 let lapNumber = 1;
 let lapTimer = undefined;
 
@@ -44,7 +43,7 @@ stopButton.onclick = function pauseTimer() {
 resetButton.onclick = function handleReset() {
   digits.innerHTML = `${convertTimeToString(0)}`;
   laps.length = 0;
-  clearInterval(timerID);
+  timerID = clearInterval(timerID);
   clearInterval(lapTimer);
   while (table.firstChild) {
     table.removeChild(table.lastChild);
@@ -57,14 +56,11 @@ resetButton.onclick = function handleReset() {
   addEmptyRows();
 };
 
-//LAP FUNC ONGOING WORK
 lapButton.onclick = function saveLapCreateNew() {
-  // console.log(timerID);
   if (timerID !== undefined) {
     lapNumber++;
     const lastLapTime = Date.now() - (startingTime + totalLapTime);
     laps.push(lastLapTime);
-    // console.log(...laps);
     totalLapTime = laps.reduce(
       (lapsTempTotal, lastLap) => lapsTempTotal + lastLap
     );
@@ -83,6 +79,7 @@ function handleLapTimer() {
   let lapStartTime = startingTime + totalLapTime;
   let currentLapTime = Math.floor(Date.now() - lapStartTime);
   let parentOfLapCell = table.firstElementChild;
+
   let lapTimeCell = parentOfLapCell.lastChild;
   let lapNumberCell = parentOfLapCell.firstChild;
   lapNumberCell.innerHTML = `Lap ${lapNumber}`;
@@ -107,16 +104,6 @@ function addLapRow(lapNumber, lapTime) {
   tr.lastChild.innerHTML = convertTimeToString(lapTime);
 
   table.prepend(trFragment); //Here it goes to DOM
-  function markBestWorstLap() {
-    if (laps.length >= 2) {
-      const worstLap = Math.min(...laps);
-      const bestLap = Math.max(...laps);
-      if (lapTime < bestLap) {
-        tr.classList.add("best-lap");
-      }
-    }
-  }
-  markBestWorstLap();
 }
 
 function convertTimeToString(time) {
@@ -145,11 +132,20 @@ function removeEmptyRows() {
   if (7 > lapNumber) {
     let allLapNodes = document.querySelectorAll("tr");
     let lastLapNode = allLapNodes[allLapNodes.length - 1];
-    // console.log(lastLapNode);
     lastLapNode.remove();
   }
 }
 
+// function markBestWorstLap() { //Unfinished- wrong
+//   if (laps.length >= 2) {
+//     const worstLap = Math.min(...laps);
+//     const bestLap = Math.max(...laps);
+//     if (lapTime < bestLap) {
+//       tr.classList.add("best-lap");
+//     }
+//   }
+// }
+// markBestWorstLap();
 // const padNumber = (...number) =>
 //   number.map((element) => element.toString().padStart(2, "0"));
 // function getStringMinutes(timeElapsed) {
