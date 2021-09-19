@@ -35,6 +35,8 @@ body {
 
 div.bottom {
   width: 375px;
+  height: 277px;
+  overflow: auto;
 }
 p.digits {
   padding: 160px 0 0 0;
@@ -100,10 +102,12 @@ p.digits {
   cursor: pointer;
 }
 
-#table {
+table {
   width: 375px;
   font-family: "SF-Pro";
   font-size: 1.5em;
+  font-variant-numeric: tabular-nums;
+  border-collapse: collapse;
   /* border-collapse: separate; */
   /* border-spacing: 100px 0; */
   /* border: 1px solid #dddddd; */
@@ -116,22 +120,25 @@ tbody {
   /* border: 2px solid #fff; */
 }
 
-/* tr {
-} */
+tr {
+  border-bottom: 2px solid gray;
+}
+
+td:first-child {
+  text-align: left;
+}
+
+td:last-child {
+  text-align: right;
+}
+
 td,
 th {
   /* border: 1px solid #dddddd; */
 
-  padding: 20px;
+  padding: 12px 20px;
 }
 
-.lapNumber {
-  text-align: left;
-}
-
-.lapTime {
-  text-align: right;
-}
 /* disabled red 28 7 6
   disabled green 5 23 10
   disabled gray 27 27 27
