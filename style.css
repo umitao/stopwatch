@@ -147,13 +147,3 @@ th {
 .worst-lap {
   color: var(--stop-text-color);
 }
-/* td:before {
-  content: "|";
-  visibility: hidden;
-} */
-
-/* disabled red 28 7 6
-  disabled green 5 23 10
-  disabled gray 27 27 27
-  gray text 153 153 160
-  */
