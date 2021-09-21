@@ -6,15 +6,17 @@ const resetButton = document.getElementById("reset");
 const startButton = document.getElementById("start");
 const lapButton = document.getElementById("lap");
 const table = document.getElementById("table");
+const tableElement = document.getElementsByTagName("table");
 const fragment = new DocumentFragment();
 
 let startingTime = null;
-let totalTimeSinceStart = null;
+let totalTimeSinceStart;
 let totalLapTime = 0;
 let stopTimeStamp = null;
-let lapNumber = 1;
+let lapNumber = 0;
 let mainTimer = undefined;
 let lapTimer = undefined;
+
 const laps = [];
 
 window.onload = addEmptyRows();
@@ -22,9 +24,11 @@ window.onload = addEmptyRows();
 startButton.onclick = function startTimer() {
   if (!stopTimeStamp) {
     startingTime = Date.now();
+    lapNumber++;
   } else {
     startingTime = Date.now() - stopTimeStamp;
   }
+
   mainTimer = setInterval(handleTimer, 10);
   lapTimer = setInterval(handleLapTimer, 10);
   showButton(stopButton, lapButton);
@@ -43,12 +47,12 @@ resetButton.onclick = function handleReset() {
   digits.innerHTML = `${convertTimeToString(0)}`;
   laps.length = 0;
   mainTimer = clearInterval(mainTimer);
-  clearInterval(lapTimer);
+  lapTimer = clearInterval(lapTimer);
   while (table.firstChild) {
     table.removeChild(table.lastChild);
   }
   stopTimeStamp = 0;
-  lapNumber = 1;
+  lapNumber = 0;
   totalLapTime = 0;
   showButton(lapButton);
   hideButton(resetButton);
@@ -57,18 +61,15 @@ resetButton.onclick = function handleReset() {
 
 lapButton.onclick = function saveLapCreateNew() {
   if (mainTimer !== undefined) {
-    lapNumber++;
     const lastLapTime = Date.now() - (startingTime + totalLapTime);
     laps.push(lastLapTime);
-
     totalLapTime = laps.reduce(
       (lapsTempTotal, lastLap) => lapsTempTotal + lastLap
     );
-    // console.log(totalLapTime);
-    // console.log(totalTimeSinceStart);
-
+    markExtremes();
     addLapRow(lapNumber, lastLapTime);
     removeEmptyRows();
+    lapNumber++;
   }
 };
 
@@ -103,15 +104,16 @@ function addLapRow(lapNumber, lapTime) {
   trFragment.prepend(td.cloneNode()); //Until here it does NOT render
   tr.firstChild.innerHTML = `Lap ${lapNumber}`;
   tr.lastChild.innerHTML = convertTimeToString(lapTime);
-
-  table.prepend(trFragment); //Here it goes to DOM
+  // lapNodesArray.push(trFragment);
+  // console.log(lapNodesArray);
+  table.insertBefore(trFragment, table.firstChild.nextSibling);
+  //table.prepend(trFragment); //Here it goes to DOM
 }
 
 function convertTimeToString(time) {
-  time /= 10;
-  const seconds = Math.floor((time / 100) % 60);
-  const minutes = Math.floor((time / (100 * 60)) % 60);
-  const hundredths = Math.floor(time % 100);
+  const seconds = Math.floor((time / 1000) % 60);
+  const minutes = Math.floor((time / (1000 * 60)) % 60);
+  const hundredths = Math.floor((time / 10) % 100);
 
   const padNumber = (number) => number.toString().padStart(2, "0");
   return `${padNumber(minutes)}:${padNumber(seconds)}.${padNumber(hundredths)}`;
@@ -131,17 +133,63 @@ function addEmptyRows() {
 }
 
 function removeEmptyRows() {
-  if (7 > lapNumber) {
+  if (lapNumber < 6) {
     let allLapNodes = document.querySelectorAll("tr");
     let lastLapNode = allLapNodes[allLapNodes.length - 1];
+    // console.log(table.rows);
     lastLapNode.remove();
   }
 }
 
+//Thanks to Victor, Best Lap and Worst Lap functions working with below code.
+
+function markExtremes() {
+  const { maxIdx, minIdx } = laps.reduce(
+    (acc, lap, idx) => {
+      if (acc.min > lap) {
+        acc.min = lap;
+        acc.minIdx = idx;
+      }
+      if (acc.max < lap) {
+        acc.max = lap;
+        acc.maxIdx = idx;
+      }
+      return acc;
+    },
+    {
+      maxIdx: -1,
+      minIdx: -1,
+      max: Number.NEGATIVE_INFINITY,
+      min: Number.POSITIVE_INFINITY,
+    }
+  );
+
+  if (maxIdx === minIdx) {
+    // Skip if we have a tie - Should only happen either when less than 2 elements, or if all elements have the same exact value
+    return;
+  }
+
+  const getLapElement = (i) => table.rows[laps.length - i - 1];
+  for (let i = 0; i < laps.length; i++) {
+    const lap = getLapElement(i);
+
+    if (i !== minIdx) {
+      lap.classList.remove("min");
+    }
+    if (i !== maxIdx) {
+      lap.classList.remove("max");
+    }
+  }
+
+  getLapElement(minIdx).classList.add("min");
+  getLapElement(maxIdx).classList.add("max");
+}
 // function markBestWorstLap() { //Unfinished- wrong
 //   if (laps.length >= 2) {
-//     const worstLap = Math.min(...laps);
-//     const bestLap = Math.max(...laps);
+// const worstLap = Math.min(...laps);
+// const bestLap = Math.max(...laps);
+// const worstIndex = laps.indexOf(worstLap);
+// const bestIndex = laps.indexOf(bestLap);
 //     if (lapTime < bestLap) {
 //       tr.classList.add("best-lap");
 //     }
